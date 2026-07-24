@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>मान ट्रेडर्स | Mana Traders — तपाईंको घर नजिकैको किराना पसल</title>
+<meta name="description" content="मान ट्रेडर्स — दैनिक उपभोग्य वस्तु, चामल, तेल, मसला, दूध र तरकारी सजिलैसँग अर्डर गर्नुहोस्। manastraders.com.np">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header" id="top">
+  <div class="wrap header-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none">
+          <path d="M8 16 L20 6 L32 16 V33 H8 Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M15 33 V22 H25 V33" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+          <circle cx="20" cy="16" r="2.4" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-text">
+        <span class="brand-np">मान ट्रेडर्स</span>
+        <span class="brand-en">MANA TRADERS</span>
+      </span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="मुख्य मेनु">
+      <a href="#products">उत्पादनहरू</a>
+      <a href="#categories">श्रेणी</a>
+      <a href="#about">हाम्रो बारे</a>
+      <a href="#contact">सम्पर्क</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="btn btn-whatsapp" href="https://wa.me/9770000000000" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.14c-.24.68-1.4 1.3-1.93 1.38-.49.08-1.11.11-1.79-.11-.41-.13-.94-.3-1.61-.6-2.84-1.23-4.69-4.1-4.83-4.29-.14-.19-1.16-1.54-1.16-2.94s.73-2.09.99-2.38c.26-.28.56-.35.75-.35.19 0 .38 0 .54.01.17.01.4-.07.63.48.24.57.81 1.97.88 2.11.07.14.12.3.02.49-.09.19-.14.3-.28.46-.14.16-.29.36-.42.48-.14.14-.28.28-.12.56.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.61-.07.16-.19.7-.81.89-1.09.19-.28.37-.23.63-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.68-.17 1.36z"/></svg>
+        व्हाट्सएपमा अर्डर
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="मेनु खोल्नुहोस्" aria-expanded="false" aria-controls="mainNav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">नयाँ बजार सडक, नेपालगन्ज</p>
+      <h1>घरको भान्सादेखि पसलको ताखासम्म,<br><span>सबै एकै ठाउँमा।</span></h1>
+      <p class="hero-sub">चामल, दाल, तेल, मसला देखि दैनिक तरकारी र दूधसम्म — मान ट्रेडर्समा ताजा सामान, उचित भाउ, र आफन्तजस्तै व्यवहार।</p>
+      <div class="hero-cta">
+        <a href="#products" class="btn btn-primary">उत्पादनहरू हेर्नुहोस्</a>
+        <a href="#contact" class="btn btn-ghost">पसल कहाँ छ?</a>
+      </div>
+      <div class="hero-trust">
+        <div><strong>१२+</strong><span>वर्षदेखि सेवामा</span></div>
+        <div><strong>६००+</strong><span>दैनिक उपभोग्य वस्तु</span></div>
+        <div><strong>आजै</strong><span>अपडेट भएको भाउ</span></div>
+      </div>
+    </div>
+
+    <div class="rate-board" aria-label="आजको भाउ पाटी">
+      <div class="rate-board-hook" aria-hidden="true"></div>
+      <div class="rate-board-panel">
+        <div class="rate-board-head">
+          <span class="rate-board-title">आजको भाउ</span>
+          <span class="rate-board-date" id="todayDate">—</span>
+        </div>
+        <ul class="rate-list" id="rateList">
+          <!-- filled by JS, fallback rows below for no-JS -->
+          <li><span>बासमती चामल</span><em>—</em></li>
+          <li><span>मुसुरो दाल</span><em>—</em></li>
+          <li><span>तोरीको तेल</span><em>—</em></li>
+          <li><span>चिनी</span><em>—</em></li>
+          <li><span>दूध</span><em>—</em></li>
+        </ul>
+        <p class="rate-board-note">भाउ बजार अनुसार घटबढ हुन सक्छ</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CATEGORIES ===== -->
+<section class="categories" id="categories">
+  <div class="wrap">
+    <h2 class="section-title">के चाहियो, छान्नुहोस्</h2>
+    <p class="section-sub">श्रेणी अनुसार सामान हेर्नुहोस्</p>
+
+    <div class="cat-grid" id="catGrid">
+      <button class="cat-card" data-cat="all" aria-pressed="true">
+        <span class="cat-icon">
+          <svg viewBox="0 0 40 40" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/><rect x="22" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/><rect x="6" y="22" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/><rect x="22" y="22" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+        </span>
+        <span>सबै सामान</span>
+      </button>
+
+      <button class="cat-card" data-cat="grain" aria-pressed="false">
+        <span class="cat-icon">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M10 14 C10 9 15 6 20 6 C25 6 30 9 30 14 V30 C30 32.2 28.2 34 26 34 H14 C11.8 34 10 32.2 10 30 Z" stroke="currentColor" stroke-width="2"/><path d="M10 22 H30" stroke="currentColor" stroke-width="2"/></svg>
+        </span>
+        <span>चामल तथा अनाज</span>
+      </button>
+
+      <button class="cat-card" data-cat="oil" aria-pressed="false">
+        <span class="cat-icon">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M16 8 H24 V13 L27 17 V32 C27 33.7 25.7 35 24 35 H16 C14.3 35 13 33.7 13 32 V17 L16 13 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13 22 H27" stroke="currentColor" stroke-width="2"/></svg>
+        </span>
+        <span>तेल तथा घ्यू</span>
+      </button>
+
+      <button class="cat-card" data-cat="spice" aria-pressed="false">
+        <span class="cat-icon">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M13 12 C13 9 16 7 20 7 C24 7 27 9 27 12 C27 15 24 15 24 18 V30 C24 33 22 35 20 35 C18 35 16 33 16 30 V18 C16 15 13 15 13 12 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </span>
+        <span>मसला</span>
+      </button>
+
+      <button class="cat-card" data-cat="dairy" aria-pressed="false">
+        <span class="cat-icon">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M16 6 H24 V12 L27 16 V32 C27 33.7 25.7 35 24 35 H16 C14.3 35 13 33.7 13 32 V16 L16 12 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13 24 H27" stroke="currentColor" stroke-width="2"/></svg>
+        </span>
+        <span>दूध तथा दुग्ध पदार्थ</span>
+      </button>
+
+      <button class="cat-card" data-cat="veg" aria-pressed="false">
+        <span class="cat-icon">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M20 8 C25 8 29 12 29 18 C29 26 25 33 20 33 C15 33 11 26 11 18 C11 12 15 8 20 8 Z" stroke="currentColor" stroke-width="2"/><path d="M20 8 C20 8 20 4 24 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span>तरकारी तथा फलफूल</span>
+      </button>
+
+      <button class="cat-card" data-cat="snack" aria-pressed="false">
+        <span class="cat-icon">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M11 15 H29 L26 33 H14 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 15 C14 10 17 7 20 7 C23 7 26 10 26 15" stroke="currentColor" stroke-width="2"/></svg>
+        </span>
+        <span>खाजा तथा पेय</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS ===== -->
+<section class="products" id="products">
+  <div class="wrap">
+    <div class="products-head">
+      <div>
+        <h2 class="section-title light">उपलब्ध सामानहरू</h2>
+        <p class="section-sub light">भाउ र स्टक अनुसार दैनिक अपडेट हुन्छ</p>
+      </div>
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20 L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="search" id="searchInput" placeholder="सामान खोज्नुहोस्... (जस्तै: चामल)">
+      </div>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+      <!-- product cards injected by app.js -->
+    </div>
+
+    <p class="product-status" id="productStatus"></p>
+  </div>
+</section>
+
+<!-- ===== WHY US ===== -->
+<section class="why">
+  <div class="wrap why-grid">
+    <div class="why-card">
+      <span class="why-num">ताजा</span>
+      <h3>दैनिक ताजा सामान</h3>
+      <p>तरकारी र दूध हरेक बिहान भित्रिन्छ, बासी सामान राख्दैनौं।</p>
+    </div>
+    <div class="why-card">
+      <span class="why-num">भरपर्दो</span>
+      <h3>सही तौल, सही भाउ</h3>
+      <p>बजार भाउ अनुसार पारदर्शी मूल्य — बढी लिइँदैन, कम पनि दिइँदैन।</p>
+    </div>
+    <div class="why-card">
+      <span class="why-num">छिटो</span>
+      <h3>छिमेकमै डेलिभरी</h3>
+      <p>वरपरका टोलमा दिनको दुई पटक डेलिभरी सुविधा उपलब्ध।</p>
+    </div>
+    <div class="why-card">
+      <span class="why-num">सजिलो</span>
+      <h3>नगद वा डिजिटल भुक्तानी</h3>
+      <p>eSewa, Khalti वा नगद — जे सजिलो हुन्छ त्यसैबाट तिर्नुहोस्।</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section class="about" id="about">
+  <div class="wrap about-inner">
+    <div class="about-copy">
+      <p class="eyebrow">हाम्रो कथा</p>
+      <h2>टोलको पसलदेखि तपाईंको भरोसासम्म</h2>
+      <p>मान ट्रेडर्स नयाँ बजार सडकमा वर्षौंदेखि सञ्चालनमा रहेको किराना पसल हो। साना कुराको लागि पनि टाढा जानु नपरोस् भनेर हामीले दैनिक उपभोग्य वस्तुदेखि चाडपर्वका विशेष सामानसम्म एकै ठाउँमा राखेका छौं। हरेक ग्राहकसँग आफन्तजस्तै व्यवहार गर्नु नै हाम्रो पहिलो सिद्धान्त हो।</p>
+      <ul class="about-list">
+        <li>बिहान ६ बजेदेखि राति ८ बजेसम्म खुला</li>
+        <li>थोक तथा खुद्रा दुवैमा सामान उपलब्ध</li>
+        <li>टोलभित्र निःशुल्क डेलिभरी (न्यूनतम अर्डरमा)</li>
+      </ul>
+    </div>
+    <div class="about-visual" aria-hidden="true">
+      <svg viewBox="0 0 320 320" fill="none">
+        <rect x="20" y="120" width="280" height="170" rx="6" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M20 120 L40 40 H280 L300 120" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M40 120 V150 M90 120 V150 M140 120 V150 M190 120 V150 M240 120 V150 M280 120 V150" stroke="currentColor" stroke-width="2"/>
+        <rect x="130" y="200" width="60" height="90" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="178" cy="245" r="3" fill="currentColor"/>
+        <path d="M55 175 H105 V210 H55 Z" stroke="currentColor" stroke-width="2"/>
+        <path d="M215 175 H265 V210 H215 Z" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="contact" id="contact">
+  <div class="wrap contact-inner">
+    <div>
+      <p class="eyebrow">सम्पर्क</p>
+      <h2>पसलसम्म पुग्ने वा अर्डर गर्ने?</h2>
+      <p class="contact-lead">फोन गर्नुहोस्, व्हाट्सएपमा लेख्नुहोस्, वा सिधै पसलमा आउनुहोस्।</p>
+
+      <div class="contact-cards">
+        <a class="contact-card" href="tel:+9770000000000">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 5 5L15 12l5 2v3a2 2 0 0 1-2 2C10.5 19 5 13.5 5 5a2 2 0 0 1 1-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </span>
+          <span>
+            <strong>फोन</strong>
+            <em>+977 000-0000000</em>
+          </span>
+        </a>
+        <a class="contact-card" href="https://wa.me/9770000000000" target="_blank" rel="noopener">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z" opacity=".15"/><path d="M17.84 16.14c-.24.68-1.4 1.3-1.93 1.38-.49.08-1.11.11-1.79-.11a15 15 0 0 1-1.61-.6c-2.84-1.23-4.69-4.1-4.83-4.29-.14-.19-1.16-1.54-1.16-2.94s.73-2.09.99-2.38c.26-.28.56-.35.75-.35h.54c.17.01.4-.07.63.48s.81 1.97.88 2.11c.07.14.12.3.02.49-.09.19-.14.3-.28.46-.14.16-.29.36-.42.48-.14.14-.28.28-.12.56.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.61-.07.16-.19.7-.81.89-1.09.19-.28.37-.23.63-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.68-.17 1.36z" stroke="none"/></svg>
+          </span>
+          <span>
+            <strong>व्हाट्सएप</strong>
+            <em>अर्डरका लागि म्यासेज गर्नुहोस्</em>
+          </span>
+        </a>
+        <a class="contact-card" href="#" target="_blank" rel="noopener">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.6" stroke="currentColor" stroke-width="1.8"/></svg>
+          </span>
+          <span>
+            <strong>ठेगाना</strong>
+            <em>नयाँ बजार सडक, नेपालगन्ज</em>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-map" aria-hidden="true">
+      <iframe
+        title="Mana Traders location"
+        src="https://www.google.com/maps?q=Nepalgunj&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <span class="brand-np">मान ट्रेडर्स</span>
+      <span>manastraders.com.np</span>
+    </div>
+    <p>© <span id="year"></span> Mana Traders. सबै अधिकार सुरक्षित।</p>
+  </div>
+</footer>
+
+<script type="module" src="js/config.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
