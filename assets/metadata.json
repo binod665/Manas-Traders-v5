@@ -1,0 +1,6 @@
+{
+  "name": "Manas Traders",
+  "description": "Production-ready grocery eCommerce website for Nepal with dual language support (English & Nepali), Supabase database integration, LocalStorage cart sync, and local payment methods.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
