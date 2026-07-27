@@ -29,8 +29,8 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({ category, isSelected
       onClick={onClick}
       className={`group relative flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 text-center ${
         isSelected
-          ? 'bg-emerald-900 text-white border-emerald-900 shadow-md scale-105'
-          : 'bg-white hover:bg-emerald-50/50 text-gray-800 border-gray-100 hover:border-emerald-300 shadow-xs'
+          ? 'bg-emerald-900 dark:bg-emerald-700 text-white border-emerald-900 shadow-md scale-105'
+          : 'bg-white dark:bg-gray-900 hover:bg-emerald-50/50 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-100 dark:border-gray-800 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-xs'
       }`}
     >
       <div className="w-14 h-14 rounded-xl overflow-hidden mb-2 relative shadow-xs">

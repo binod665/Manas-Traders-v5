@@ -942,4 +942,91 @@ export async function deleteProductImageFromSupabaseStorage(imageUrl: string): P
   }
 }
 
+/**
+ * Supabase Auth: Update Password for currently logged in user
+ */
+export async function updatePasswordWithSupabase(newPassword: string): Promise<{ success: boolean; error: string | null }> {
+  const client = getSupabaseClient();
+  if (!client) {
+    return { success: true, error: null };
+  }
+
+  try {
+    const { error } = await client.auth.updateUser({ password: newPassword });
+    if (error) {
+      return { success: false, error: error.message };
+    }
+    return { success: true, error: null };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to update password.' };
+  }
+}
+
+/**
+ * Supabase Auth: Resend Email Verification link
+ */
+export async function resendVerificationEmailWithSupabase(email: string): Promise<{ success: boolean; error: string | null }> {
+  const client = getSupabaseClient();
+  if (!client) {
+    return { success: true, error: null };
+  }
+
+  try {
+    const { error } = await client.auth.resend({
+      type: 'signup',
+      email,
+    });
+    if (error) {
+      return { success: false, error: error.message };
+    }
+    return { success: true, error: null };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to resend verification email.' };
+  }
+}
+
+/**
+ * Update user avatar URL in Supabase Auth & Local storage
+ */
+export async function updateAvatarInDB(userId: string, avatarUrl: string): Promise<void> {
+  const savedUserStr = localStorage.getItem('manas_traders_user');
+  if (savedUserStr) {
+    const current: UserProfile = JSON.parse(savedUserStr);
+    current.avatarUrl = avatarUrl;
+    localStorage.setItem('manas_traders_user', JSON.stringify(current));
+  }
+
+  const client = getSupabaseClient();
+  if (client) {
+    try {
+      await client.auth.updateUser({ data: { avatar_url: avatarUrl } });
+      await client.from('users').update({ avatar_url: avatarUrl }).eq('id', userId);
+    } catch (e) {
+      console.warn('Error syncing avatar to Supabase:', e);
+    }
+  }
+}
+
+/**
+ * Sync user saved addresses to Supabase
+ */
+export async function syncAddressesToSupabase(userId: string, addresses: any[]): Promise<void> {
+  const savedUserStr = localStorage.getItem('manas_traders_user');
+  if (savedUserStr) {
+    const current: UserProfile = JSON.parse(savedUserStr);
+    current.savedAddresses = addresses;
+    localStorage.setItem('manas_traders_user', JSON.stringify(current));
+  }
+
+  const client = getSupabaseClient();
+  if (client && userId) {
+    try {
+      await client.auth.updateUser({ data: { saved_addresses: addresses } });
+      await client.from('users').update({ saved_addresses: addresses }).eq('id', userId);
+    } catch (e) {
+      console.warn('Error syncing addresses to Supabase:', e);
+    }
+  }
+}
+
 

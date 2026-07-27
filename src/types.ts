@@ -79,6 +79,17 @@ export interface Order {
   paymentStatus: 'unpaid' | 'paid';
 }
 
+export interface SavedAddress {
+  id: string;
+  label: string; // e.g., 'Home', 'Office', 'Store', 'Family'
+  fullName: string;
+  phone: string;
+  district: string;
+  municipality?: string;
+  address: string;
+  isDefault: boolean;
+}
+
 export interface UserProfile {
   id: string;
   email: string;
@@ -89,6 +100,9 @@ export interface UserProfile {
   municipality?: string;
   address: string;
   role: 'customer' | 'admin';
+  avatarUrl?: string;
+  emailVerified?: boolean;
+  savedAddresses?: SavedAddress[];
 }
 
 export interface Coupon {

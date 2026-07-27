@@ -16,8 +16,11 @@ import { getTranslation } from '../translations';
 import { Coupon } from '../types';
 
 interface AppContextType {
+  // Language & Theme
   language: Language;
   setLanguage: (lang: Language) => void;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
   products: Product[];
   categories: Category[];
   cart: CartItem[];
@@ -74,6 +77,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [language, setLanguageState] = useState<Language>(() => {
     return (localStorage.getItem('manas_traders_lang') as Language) || 'ne';
   });
+
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('manas_traders_theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('manas_traders_theme', theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
   
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [categories] = useState<Category[]>(initialCategories);
@@ -341,6 +363,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       value={{
         language,
         setLanguage,
+        theme,
+        toggleTheme,
         products,
         categories,
         cart,

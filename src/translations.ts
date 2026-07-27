@@ -98,6 +98,8 @@ export const translations = {
     mins: "Mins",
     secs: "Secs",
     verifiedBuyer: "Verified Customer",
+    darkMode: "Dark Mode",
+    lightMode: "Light Mode",
   },
   ne: {
     brandName: 'मनास ट्रेडर्स',
@@ -196,6 +198,8 @@ export const translations = {
     mins: "मिनेट",
     secs: "सेकेन्ड",
     verifiedBuyer: "प्रमाणित ग्राहक",
+    darkMode: "डार्क मोड",
+    lightMode: "लाइट मोड",
   },
 };
 

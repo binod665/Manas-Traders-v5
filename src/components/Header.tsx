@@ -14,6 +14,8 @@ import {
   PackageCheck,
   User,
   X,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -24,6 +26,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
   const {
     language,
     setLanguage,
+    theme,
+    toggleTheme,
     selectedDistrict,
     setSelectedDistrict,
     searchQuery,
@@ -41,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
   const cartTotalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-xs">
+    <header className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-xs transition-colors">
       {/* Main Header Bar */}
       <div className="max-w-7xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">
@@ -52,10 +56,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                 <span className="font-bold text-xl font-serif">M</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold tracking-tight text-gray-900 group-hover:text-emerald-700 transition-colors flex items-center gap-1.5">
+                <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
                   {getTranslation(language, 'brandName')}
                 </h1>
-                <p className="text-[10px] uppercase tracking-wider font-semibold text-emerald-700 -mt-0.5">
+                <p className="text-[10px] uppercase tracking-wider font-semibold text-emerald-700 dark:text-emerald-400 -mt-0.5">
                   Fresh Groceries • Nepal
                 </p>
               </div>
@@ -66,18 +70,18 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
           {/* Search Bar - Desktop */}
           <div className="hidden md:flex flex-1 max-w-lg mx-4">
             <div className="relative w-full">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={getTranslation(language, 'searchPlaceholder')}
-                className="w-full pl-10 pr-10 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                className="w-full pl-10 pr-10 py-2.5 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 rounded-md"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-md"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -85,21 +89,21 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             </div>
           </div>
 
-          {/* Controls: Location, Language, Admin, Cart */}
+          {/* Controls: Location, Language, Theme, Admin, Cart */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* District Selector */}
-            <div className="hidden sm:flex items-center gap-1 bg-gray-50 hover:bg-gray-100/80 px-2.5 py-1.5 rounded-xl border border-gray-200 text-xs font-medium text-gray-700">
-              <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <div className="hidden sm:flex items-center gap-1 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100/80 dark:hover:bg-gray-750 px-2.5 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-700 dark:text-gray-200">
+              <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <select
                 value={selectedDistrict.id}
                 onChange={(e) => {
                   const d = nepalDistricts.find((item) => item.id === e.target.value);
                   if (d) setSelectedDistrict(d);
                 }}
-                className="bg-transparent focus:outline-none cursor-pointer text-gray-800 pr-1 font-medium"
+                className="bg-transparent focus:outline-none cursor-pointer text-gray-800 dark:text-gray-200 dark:bg-gray-800 pr-1 font-medium"
               >
                 {nepalDistricts.map((d) => (
-                  <option key={d.id} value={d.id}>
+                  <option key={d.id} value={d.id} className="dark:bg-gray-800 dark:text-gray-100">
                     {language === 'ne' ? d.nameNe : d.nameEn} (Rs.{d.deliveryFee})
                   </option>
                 ))}
@@ -109,20 +113,37 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             {/* Language Switcher */}
             <button
               onClick={() => setLanguage(language === 'en' ? 'ne' : 'en')}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-gray-200 hover:border-emerald-400 bg-gray-50 hover:bg-white text-xs font-semibold text-gray-800 transition-all"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-emerald-400 dark:hover:border-emerald-500 bg-gray-50 dark:bg-gray-800 hover:bg-white dark:hover:bg-gray-700 text-xs font-semibold text-gray-800 dark:text-gray-200 transition-all"
               title="Switch Language / भाषा फेर्नुहोस्"
             >
-              <Globe className="w-3.5 h-3.5 text-emerald-600" />
+              <Globe className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>{language === 'en' ? 'नेपाली' : 'English'}</span>
+            </button>
+
+            {/* Dark / Light Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-1.5 p-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-gray-700 text-gray-700 dark:text-amber-400 transition-all cursor-pointer"
+              title={theme === 'dark' ? getTranslation(language, 'lightMode') : getTranslation(language, 'darkMode')}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400 fill-amber-400/20" />
+              ) : (
+                <Moon className="w-4 h-4 text-gray-700" />
+              )}
             </button>
 
             {/* User Account / Auth Modal Trigger */}
             <button
               onClick={() => setActiveModal('auth')}
-              className="flex items-center gap-1.5 p-1.5 sm:px-3 sm:py-1.5 text-xs font-bold text-gray-700 hover:text-emerald-800 bg-gray-50 hover:bg-emerald-50 rounded-xl border border-gray-200 transition-all cursor-pointer"
-              title={user ? `Logged in as ${user.fullName}` : 'Sign In / Register'}
+              className="flex items-center gap-1.5 p-1.5 sm:px-3 sm:py-1.5 text-xs font-bold text-gray-700 dark:text-gray-200 hover:text-emerald-800 dark:hover:text-emerald-400 bg-gray-50 dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-700 transition-all cursor-pointer"
+              title={user ? `Logged in as ${user.fullName} (Customer Dashboard)` : 'Sign In / Register'}
             >
-              <User className="w-4 h-4 text-emerald-700" />
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} alt={user.fullName} className="w-5 h-5 rounded-full object-cover border border-emerald-600" />
+              ) : (
+                <User className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
+              )}
               <span className="hidden md:inline max-w-[100px] truncate">
                 {user ? user.fullName.split(' ')[0] : 'Sign In'}
               </span>
@@ -131,10 +152,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             {/* Admin Modal Trigger */}
             <button
               onClick={() => setActiveModal('admin')}
-              className="hidden sm:flex items-center gap-1.5 p-2 text-gray-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 p-2 text-gray-600 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-gray-800 rounded-xl transition-colors cursor-pointer"
               title={getTranslation(language, 'adminPanel')}
             >
-              <ShieldCheck className="w-5 h-5 text-gray-600 hover:text-emerald-700" />
+              <ShieldCheck className="w-5 h-5" />
             </button>
 
             {/* Wishlist Button */}
@@ -144,7 +165,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                   alert(language === 'ne' ? 'तपाईंको विसलिस्ट खाली छ।' : 'Wishlist is empty.');
                 }
               }}
-              className="relative p-2 text-gray-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors"
+              className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-gray-800 rounded-xl transition-colors"
               title={getTranslation(language, 'wishlist')}
             >
               <Heart className="w-5 h-5" />
@@ -178,18 +199,18 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
         {/* Mobile Search Input */}
         <div className="mt-3 md:hidden">
           <div className="relative w-full">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={getTranslation(language, 'searchPlaceholder')}
-              className="w-full pl-10 pr-10 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+              className="w-full pl-10 pr-10 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
