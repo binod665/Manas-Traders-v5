@@ -1,4 +1,5 @@
 import { Language } from './types';
+import i18n from './i18n';
 
 export const translations = {
   en: {
@@ -204,5 +205,8 @@ export const translations = {
 };
 
 export function getTranslation(lang: Language, key: keyof typeof translations['en']): string {
+  if (i18n.isInitialized && i18n.exists(key)) {
+    return i18n.t(key, { lng: lang });
+  }
   return translations[lang]?.[key] || translations['en'][key] || String(key);
 }

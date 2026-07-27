@@ -14,6 +14,7 @@ import {
 } from '../lib/supabase';
 import { getTranslation } from '../translations';
 import { Coupon } from '../types';
+import i18n from '../i18n';
 
 interface AppContextType {
   // Language & Theme
@@ -86,10 +87,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     localStorage.setItem('manas_traders_theme', theme);
+    const root = document.documentElement;
     if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
+      root.style.colorScheme = 'dark';
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
+      root.style.colorScheme = 'light';
     }
   }, [theme]);
 
@@ -194,6 +198,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('manas_traders_lang', lang);
+    i18n.changeLanguage(lang);
   };
 
   // Persist cart to LocalStorage AND sync to Supabase if logged in
