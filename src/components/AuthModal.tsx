@@ -75,9 +75,9 @@ export const AuthModal: React.FC = () => {
   // Demo auto-fill helper
   const handleQuickDemoFill = (role: 'customer' | 'admin') => {
     if (role === 'admin') {
-      setEmail('admin@manastraders.com.np');
-      setPassword('Admin123456!');
-      setFullName('Manas Admin Manager');
+      setEmail('admin@manastraders.com');
+      setPassword('9956432661@GbYa');
+      setFullName('Binod Bhandari (Admin)');
       setPhone('9848500665');
       setDistrict('Kailali');
     } else {

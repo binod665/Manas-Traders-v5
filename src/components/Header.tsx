@@ -10,6 +10,10 @@ import {
   ShieldCheck,
   User,
   X,
+  PhoneCall,
+  Sun,
+  Moon,
+  Globe,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -19,6 +23,9 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
   const {
     language,
+    setLanguage,
+    theme,
+    toggleTheme,
     selectedDistrict,
     setSelectedDistrict,
     searchQuery,
@@ -98,6 +105,40 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             </div>
 
 
+
+            {/* Language Switcher Button */}
+            <button
+              onClick={() => setLanguage(language === 'ne' ? 'en' : 'ne')}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl border border-gray-200 dark:border-gray-700 text-xs font-bold transition-all cursor-pointer"
+              title={language === 'ne' ? 'Switch to English' : 'नेपाली भाषा छान्नुहोस्'}
+            >
+              <Globe className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>{language === 'ne' ? 'नेपाली' : 'English'}</span>
+            </button>
+
+            {/* Dark / Light Mode Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 bg-gray-50 dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-gray-700 text-gray-700 dark:text-amber-400 rounded-xl border border-gray-200 dark:border-gray-700 transition-all cursor-pointer flex items-center justify-center group"
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label="Toggle Dark/Light Mode"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400 group-hover:rotate-45 transition-transform" />
+              ) : (
+                <Moon className="w-4 h-4 text-emerald-700 group-hover:-rotate-12 transition-transform" />
+              )}
+            </button>
+            <button
+              onClick={() => setActiveModal('contact')}
+              className="flex items-center gap-1.5 p-1.5 sm:px-3 sm:py-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 hover:text-emerald-900 dark:hover:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/70 hover:bg-emerald-100 dark:hover:bg-emerald-900/80 rounded-xl border border-emerald-200 dark:border-emerald-800 transition-all cursor-pointer"
+              title="Contact Manas Traders Tikapur"
+            >
+              <PhoneCall className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span className="hidden lg:inline">
+                {getTranslation(language, 'contactUs')}
+              </span>
+            </button>
 
             {/* User Account / Auth Modal Trigger */}
             <button

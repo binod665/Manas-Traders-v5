@@ -507,25 +507,80 @@ export const CheckoutModal: React.FC = () => {
                 </div>
               )}
 
-              {(paymentMethod === 'esewa' || paymentMethod === 'khalti') && (
-                <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center gap-4">
-                  <div className="w-20 h-20 bg-white p-1.5 rounded-xl border border-emerald-300 shrink-0 flex items-center justify-center">
+              {paymentMethod === 'esewa' && (
+                <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 rounded-2xl flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal('esewaQr')}
+                    className="w-24 h-28 bg-white p-1 rounded-xl border border-emerald-300 dark:border-emerald-700 shrink-0 flex items-center justify-center hover:scale-105 transition-transform cursor-pointer shadow-xs group overflow-hidden"
+                    title="Click to expand eSewa QR Code"
+                  >
                     <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ManasTraders${paymentMethod.toUpperCase()}Payment`}
-                      alt={`${paymentMethod} QR`}
-                      className="w-full h-full object-contain"
+                      src="/esewa_qr.jpg"
+                      alt="Manas Traders eSewa QR"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-contain rounded-lg select-none"
                     />
-                  </div>
-                  <div className="text-xs">
-                    <span className="font-bold text-emerald-950 block">
-                      Scan to Pay via {paymentMethod === 'esewa' ? 'eSewa' : 'Khalti'} App
+                  </button>
+                  <div className="text-xs space-y-1">
+                    <span className="font-extrabold text-emerald-950 dark:text-emerald-200 block">
+                      Scan to Pay via eSewa App
                     </span>
-                    <p className="text-emerald-800 text-[11px] mt-0.5">
-                      Wallet ID: <strong className="font-mono font-bold">9801234567</strong> (Manas Traders)
+                    <p className="text-emerald-800 dark:text-emerald-300 text-[11px]">
+                      Merchant: <strong className="font-bold">MANAS TRADERS</strong>
                     </p>
-                    <p className="text-emerald-800 text-[11px]">
-                      Amount: <strong className="font-extrabold text-emerald-900">Rs. {total.toLocaleString('ne-NP')}</strong>
+                    <p className="text-emerald-800 dark:text-emerald-300 text-[11px]">
+                      eSewa Number: <strong className="font-mono font-bold">9848500665</strong>
                     </p>
+                    <p className="text-emerald-800 dark:text-emerald-300 text-[11px]">
+                      Amount: <strong className="font-extrabold text-emerald-900 dark:text-emerald-100">Rs. {total.toLocaleString('ne-NP')}</strong>
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setActiveModal('esewaQr')}
+                      className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-900 cursor-pointer pt-0.5 block"
+                    >
+                      Click to view full-screen eSewa QR
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'khalti' && (
+                <div className="p-3.5 bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 rounded-2xl flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal('khaltiQr')}
+                    className="w-24 h-28 bg-white p-1 rounded-xl border border-purple-300 dark:border-purple-700 shrink-0 flex items-center justify-center hover:scale-105 transition-transform cursor-pointer shadow-xs group overflow-hidden"
+                    title="Click to expand Khalti QR Code"
+                  >
+                    <img
+                      src="/khalti_qr.jpg"
+                      alt="Manas Traders Khalti QR"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-contain rounded-lg select-none"
+                    />
+                  </button>
+                  <div className="text-xs space-y-1">
+                    <span className="font-extrabold text-purple-950 dark:text-purple-200 block">
+                      Scan to Pay via Khalti App
+                    </span>
+                    <p className="text-purple-800 dark:text-purple-300 text-[11px]">
+                      Merchant: <strong className="font-bold">Manas Traders</strong>
+                    </p>
+                    <p className="text-purple-800 dark:text-purple-300 text-[11px]">
+                      Khalti Number: <strong className="font-mono font-bold">9848500665</strong>
+                    </p>
+                    <p className="text-purple-800 dark:text-purple-300 text-[11px]">
+                      Amount: <strong className="font-extrabold text-purple-900 dark:text-purple-100">Rs. {total.toLocaleString('ne-NP')}</strong>
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setActiveModal('khaltiQr')}
+                      className="text-[10px] font-bold text-purple-700 dark:text-purple-400 underline hover:text-purple-900 cursor-pointer pt-0.5 block"
+                    >
+                      Click to view full-screen Khalti QR
+                    </button>
                   </div>
                 </div>
               )}

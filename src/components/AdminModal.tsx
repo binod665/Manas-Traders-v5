@@ -15,6 +15,7 @@ import {
   signInWithSupabase,
   uploadMultipleProductImagesToSupabase,
   deleteProductImageFromSupabaseStorage,
+  fetchContactMessagesFromSupabase,
 } from '../lib/supabase';
 import { Product, Category, Order, UserProfile, Coupon, PaymentMethod } from '../types';
 import { getTranslation } from '../translations';
@@ -64,6 +65,7 @@ import {
   ServerOff,
   Zap,
   Smartphone,
+  MessageSquare,
 } from 'lucide-react';
 import { SUPABASE_RLS_SQL_SCRIPT } from '../lib/supabase-rls-script';
 
@@ -87,11 +89,18 @@ export const AdminModal: React.FC = () => {
   const [adminPassword, setAdminPassword] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isAdminUnlocked, setIsAdminUnlocked] = useState(false);
 
   // Active Tab State
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'products' | 'categories' | 'orders' | 'customers' | 'inventory' | 'reports' | 'coupons' | 'githubGuide' | 'settings'
+    'dashboard' | 'products' | 'categories' | 'orders' | 'customers' | 'inventory' | 'reports' | 'coupons' | 'messages' | 'githubGuide' | 'settings'
   >('dashboard');
+
+  const [contactMessages, setContactMessages] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchContactMessagesFromSupabase().then((msgs) => setContactMessages(msgs));
+  }, [activeTab]);
 
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
@@ -190,8 +199,8 @@ export const AdminModal: React.FC = () => {
 
   if (activeModal !== 'admin' && activeModal !== 'githubGuide') return null;
 
-  // Check Admin role
-  const isAdmin = user?.role === 'admin' || user?.email?.includes('admin');
+  // Require explicit login for admin access
+  const isAdmin = isAdminUnlocked && user?.role === 'admin';
 
   // Handle Admin Auth Login
   const handleAdminLogin = async (e: React.FormEvent) => {
@@ -200,36 +209,46 @@ export const AdminModal: React.FC = () => {
     setIsLoggingIn(true);
 
     try {
+      const cleanEmail = adminEmail.trim().toLowerCase();
+      // Allow login with demo admin email or configured email
+      if (
+        (cleanEmail === 'admin@manastraders.com' || cleanEmail === 'bhandaribinodtkp@gmail.com') &&
+        adminPassword === '9956432661@GbYa'
+      ) {
+        const adminUser: UserProfile = {
+          id: 'admin-usr-binod',
+          email: 'admin@manastraders.com',
+          fullName: 'Binod Bhandari (Admin)',
+          phone: '9848500665',
+          district: 'Kailali',
+          address: 'Tikapur, Kailali',
+          role: 'admin',
+        };
+        setUser(adminUser);
+        setIsAdminUnlocked(true);
+        localStorage.setItem('manas_traders_user', JSON.stringify(adminUser));
+        addToast('Admin Authenticated', `Welcome back, ${adminUser.fullName}`, 'success');
+        setIsLoggingIn(false);
+        return;
+      }
+
       const { userProfile, error } = await signInWithSupabase(adminEmail, adminPassword);
       if (error) {
         setAuthError(error);
-      } else if (userProfile) {
-        // Enforce Admin role
+      } else if (userProfile && (userProfile.role === 'admin' || userProfile.email === 'bhandaribinodtkp@gmail.com')) {
         const updatedAdmin: UserProfile = { ...userProfile, role: 'admin' };
         setUser(updatedAdmin);
+        setIsAdminUnlocked(true);
         localStorage.setItem('manas_traders_user', JSON.stringify(updatedAdmin));
         addToast('Admin Authenticated', `Welcome back, ${updatedAdmin.fullName}`, 'success');
+      } else {
+        setAuthError('Access denied. Incorrect Admin Email or Password.');
       }
     } catch (err: any) {
       setAuthError('Authentication failed. Please check credentials.');
     } finally {
       setIsLoggingIn(false);
     }
-  };
-
-  const handleQuickDemoAdminLogin = () => {
-    const demoAdmin: UserProfile = {
-      id: 'admin-demo-1',
-      email: 'admin@manastraders.com',
-      fullName: 'Binod Bhandari (Admin)',
-      phone: '9801234567',
-      district: 'Kathmandu',
-      address: 'New Road, Kathmandu',
-      role: 'admin',
-    };
-    setUser(demoAdmin);
-    localStorage.setItem('manas_traders_user', JSON.stringify(demoAdmin));
-    addToast('Admin Session Started', 'Logged in as Store Administrator', 'success');
   };
 
   // Multiple Product Image Upload handler to Supabase Storage
@@ -556,7 +575,7 @@ export const AdminModal: React.FC = () => {
             <div>
               <h3 className="text-xl font-extrabold text-gray-900">Admin Authentication Required</h3>
               <p className="text-xs text-gray-500 mt-1">
-                Please sign in with your Supabase Admin account credentials to access store controls.
+                Please sign in with your Admin account credentials to access store controls.
               </p>
             </div>
 
@@ -569,7 +588,7 @@ export const AdminModal: React.FC = () => {
 
             <form onSubmit={handleAdminLogin} className="space-y-3 text-left">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Admin Email</label>
+                <label className="block text-xs font-bold text-gray-700 mb-1">Admin Email / Username</label>
                 <input
                   type="email"
                   required
@@ -600,15 +619,6 @@ export const AdminModal: React.FC = () => {
                 {isLoggingIn ? 'Authenticating...' : 'Sign In as Admin'}
               </button>
             </form>
-
-            <div className="pt-3 border-t border-gray-200">
-              <button
-                onClick={handleQuickDemoAdminLogin}
-                className="w-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-extrabold py-2 px-3 rounded-xl text-xs transition-colors cursor-pointer"
-              >
-                🔑 Launch Demo Admin Session
-              </button>
-            </div>
           </div>
         ) : (
           /* MAIN ADMIN DASHBOARD BODY */
@@ -624,6 +634,7 @@ export const AdminModal: React.FC = () => {
                 { id: 'inventory', label: 'Inventory', icon: Tag, badge: outOfStockCount ? `${outOfStockCount} Low` : undefined },
                 { id: 'reports', label: 'Reports', icon: TrendingUp },
                 { id: 'coupons', label: 'Coupons', icon: Ticket, badge: coupons.length },
+                { id: 'messages', label: 'Inquiries', icon: MessageSquare, badge: contactMessages.length || undefined },
                 { id: 'githubGuide', label: 'GitHub Guide', icon: Github },
                 { id: 'settings', label: 'Settings', icon: Settings },
               ].map((tab) => {
@@ -662,7 +673,10 @@ export const AdminModal: React.FC = () => {
                   <span className="font-bold text-white block line-clamp-1">{user?.fullName}</span>
                 </div>
                 <button
-                  onClick={() => setUser(null)}
+                  onClick={() => {
+                    setIsAdminUnlocked(false);
+                    setUser(null);
+                  }}
                   className="w-full bg-gray-800 hover:bg-red-900/60 text-gray-300 hover:text-red-200 p-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <LogOut className="w-3.5 h-3.5" />
@@ -790,7 +804,7 @@ export const AdminModal: React.FC = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                       <h3 className="text-lg font-black text-gray-900">Products Catalog ({filteredProducts.length})</h3>
-                      <p className="text-xs text-gray-500">Manage grocery items, prices, and stock in Supabase</p>
+                      <p className="text-xs text-gray-500">Manage grocery items, prices, and stock</p>
                     </div>
                     <button
                       onClick={() => handleOpenProductForm()}
@@ -916,7 +930,7 @@ export const AdminModal: React.FC = () => {
                 <div className="space-y-5 animate-fade-in">
                   <div>
                     <h3 className="text-lg font-black text-gray-900">Categories Management</h3>
-                    <p className="text-xs text-gray-500">Add, edit, and organize grocery sections in Supabase</p>
+                    <p className="text-xs text-gray-500">Add, edit, and organize grocery sections</p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -1005,7 +1019,7 @@ export const AdminModal: React.FC = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                       <h3 className="text-lg font-black text-gray-900">Customer Orders ({filteredOrders.length})</h3>
-                      <p className="text-xs text-gray-500">Track delivery statuses and update orders in Supabase</p>
+                      <p className="text-xs text-gray-500">Track delivery statuses and update orders</p>
                     </div>
 
                     <button
@@ -1137,7 +1151,7 @@ export const AdminModal: React.FC = () => {
                 <div className="space-y-4 animate-fade-in">
                   <div>
                     <h3 className="text-lg font-black text-gray-900">Registered Customers ({customers.length})</h3>
-                    <p className="text-xs text-gray-500">Customer directory synced with Supabase auth profiles</p>
+                    <p className="text-xs text-gray-500">Customer directory synced with auth profiles</p>
                   </div>
 
                   <input
@@ -1482,6 +1496,76 @@ export const AdminModal: React.FC = () => {
                       </li>
                     </ul>
                   </div>
+                </div>
+              )}
+
+              {/* TAB 9: CONTACT INQUIRIES & MESSAGES */}
+              {activeTab === 'messages' && (
+                <div className="space-y-5 animate-fade-in">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <h3 className="text-lg font-black text-gray-900">
+                        Customer Inquiries & Contact Form Submissions
+                      </h3>
+                      <p className="text-xs text-gray-500">
+                        Messages sent via the Contact Form and saved in Supabase database
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={async () => {
+                        const msgs = await fetchContactMessagesFromSupabase();
+                        setContactMessages(msgs);
+                        addToast('Refreshed', 'Inquiries list updated', 'info');
+                      }}
+                      className="bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                      <span>Refresh Messages</span>
+                    </button>
+                  </div>
+
+                  {contactMessages.length === 0 ? (
+                    <div className="bg-white p-8 rounded-2xl border border-gray-200 text-center space-y-2">
+                      <MessageSquare className="w-8 h-8 text-gray-300 mx-auto" />
+                      <h4 className="font-bold text-sm text-gray-700">No Messages Yet</h4>
+                      <p className="text-xs text-gray-500 max-w-sm mx-auto">
+                        Inquiries submitted through the Contact Page will be logged here and stored in Supabase.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {contactMessages.map((msg: any) => (
+                        <div
+                          key={msg.id}
+                          className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-2xs space-y-2 hover:border-emerald-300 transition-all"
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-extrabold text-sm text-gray-900">
+                                {msg.fullName}
+                              </span>
+                              <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
+                                {msg.subject}
+                              </span>
+                            </div>
+                            <span className="text-[11px] text-gray-400 font-mono">
+                              {msg.createdAt ? new Date(msg.createdAt).toLocaleString() : 'Recently'}
+                            </span>
+                          </div>
+
+                          <div className="text-xs text-gray-600 space-y-1">
+                            <p className="font-semibold text-emerald-800">
+                              Contact: <a href={`tel:${msg.emailOrPhone}`} className="underline">{msg.emailOrPhone}</a>
+                            </p>
+                            <p className="bg-gray-50 p-3 rounded-xl border border-gray-100 text-gray-800 text-xs leading-relaxed whitespace-pre-wrap font-sans mt-2">
+                              "{msg.message}"
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 

@@ -126,3 +126,13 @@ export interface ToastMessage {
   title: string;
   message: string;
 }
+
+export interface ContactMessage {
+  id: string;
+  fullName: string;
+  emailOrPhone: string;
+  subject: string;
+  message: string;
+  createdAt: string;
+  status?: 'unread' | 'read' | 'replied';
+}

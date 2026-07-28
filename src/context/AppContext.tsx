@@ -54,8 +54,8 @@ interface AppContextType {
   toggleWishlist: (productId: string) => void;
   
   // Modals
-  activeModal: 'quickView' | 'checkout' | 'auth' | 'supabaseConfig' | 'admin' | 'githubGuide' | null;
-  setActiveModal: (modal: 'quickView' | 'checkout' | 'auth' | 'supabaseConfig' | 'admin' | 'githubGuide' | null) => void;
+  activeModal: 'quickView' | 'checkout' | 'auth' | 'supabaseConfig' | 'admin' | 'githubGuide' | 'contact' | 'esewaQr' | 'khaltiQr' | null;
+  setActiveModal: (modal: 'quickView' | 'checkout' | 'auth' | 'supabaseConfig' | 'admin' | 'githubGuide' | 'contact' | 'esewaQr' | 'khaltiQr' | null) => void;
   selectedProductForView: Product | null;
   setSelectedProductForView: (p: Product | null) => void;
   
@@ -129,7 +129,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : [];
   });
 
-  const [activeModal, setActiveModal] = useState<'quickView' | 'checkout' | 'auth' | 'supabaseConfig' | 'admin' | 'githubGuide' | null>(null);
+  const [activeModal, setActiveModal] = useState<'quickView' | 'checkout' | 'auth' | 'supabaseConfig' | 'admin' | 'githubGuide' | 'contact' | 'esewaQr' | 'khaltiQr' | null>(null);
   const [selectedProductForView, setSelectedProductForView] = useState<Product | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 

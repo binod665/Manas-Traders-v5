@@ -16,6 +16,9 @@ import { SupabaseConfigModal } from './components/SupabaseConfigModal';
 import { GitHubPagesGuideModal } from './components/GitHubPagesGuideModal';
 import { AdminModal } from './components/AdminModal';
 import { AuthModal } from './components/AuthModal';
+import { ContactModal } from './components/ContactModal';
+import { EsewaQrModal } from './components/EsewaQrModal';
+import { KhaltiQrModal } from './components/KhaltiQrModal';
 import { ToastContainer } from './components/ToastContainer';
 import { Footer } from './components/Footer';
 import { getTranslation } from './translations';
@@ -128,6 +131,9 @@ function StoreMain() {
       <GitHubPagesGuideModal />
       <AdminModal />
       <AuthModal />
+      <ContactModal />
+      <EsewaQrModal />
+      <KhaltiQrModal />
       <ToastContainer />
     </div>
   );

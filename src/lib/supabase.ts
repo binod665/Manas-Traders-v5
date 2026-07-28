@@ -361,6 +361,29 @@ export async function signInWithSupabase(
   email: string,
   password: string
 ): Promise<{ userProfile: UserProfile | null; error: string | null }> {
+  const cleanEmail = email.trim().toLowerCase();
+  const ADMIN_EMAILS = ['bhandaribinodtkp@gmail.com', 'admin@manastraders.com'];
+  const ADMIN_PASSWORD = '9956432661@GbYa';
+
+  // Hardcoded Admin Credential Check
+  if (ADMIN_EMAILS.includes(cleanEmail)) {
+    if (password === ADMIN_PASSWORD) {
+      const adminUser: UserProfile = {
+        id: 'admin-usr-binod',
+        email: 'admin@manastraders.com',
+        fullName: 'Binod Bhandari (Admin)',
+        phone: '9848500665',
+        district: 'Kailali',
+        address: 'Tikapur, Kailali',
+        role: 'admin',
+      };
+      localStorage.setItem('manas_traders_user', JSON.stringify(adminUser));
+      return { userProfile: adminUser, error: null };
+    } else {
+      return { userProfile: null, error: 'Incorrect admin password.' };
+    }
+  }
+
   const client = getSupabaseClient();
 
   if (!client) {
@@ -368,7 +391,7 @@ export async function signInWithSupabase(
     const savedUserStr = localStorage.getItem('manas_traders_user');
     if (savedUserStr) {
       const savedUser = JSON.parse(savedUserStr);
-      if (savedUser.email === email) {
+      if (savedUser.email.toLowerCase() === cleanEmail) {
         return { userProfile: savedUser, error: null };
       }
     }
@@ -380,7 +403,7 @@ export async function signInWithSupabase(
       phone: '+977 9801234567',
       district: 'Kathmandu',
       address: 'New Road, Kathmandu',
-      role: email.includes('admin') ? 'admin' : 'customer',
+      role: 'customer',
     };
     localStorage.setItem('manas_traders_user', JSON.stringify(demoUser));
     return { userProfile: demoUser, error: null };
@@ -710,7 +733,7 @@ export async function fetchCustomersFromDB(): Promise<UserProfile[]> {
       ? JSON.parse(savedUserStr)
       : {
           id: 'usr-1',
-          email: 'admin@manastraders.com',
+          email: 'bhandaribinodtkp@gmail.com',
           fullName: 'Binod Bhandari (Admin)',
           phone: '9801234567',
           district: 'Kathmandu',
@@ -1027,6 +1050,88 @@ export async function syncAddressesToSupabase(userId: string, addresses: any[]):
       console.warn('Error syncing addresses to Supabase:', e);
     }
   }
+}
+
+/**
+ * Submit Contact Form Message to Supabase DB & LocalStorage
+ */
+export async function submitContactMessageToSupabase(data: {
+  fullName: string;
+  emailOrPhone: string;
+  subject: string;
+  message: string;
+}): Promise<{ success: boolean; message: string }> {
+  const newMessage = {
+    id: 'msg-' + Date.now().toString(),
+    fullName: data.fullName,
+    emailOrPhone: data.emailOrPhone,
+    subject: data.subject,
+    message: data.message,
+    createdAt: new Date().toISOString(),
+    status: 'unread',
+  };
+
+  // Save to LocalStorage
+  const savedStr = localStorage.getItem('manas_traders_contact_messages');
+  const existingMsgs = savedStr ? JSON.parse(savedStr) : [];
+  existingMsgs.unshift(newMessage);
+  localStorage.setItem('manas_traders_contact_messages', JSON.stringify(existingMsgs));
+
+  // Try saving to Supabase table 'contact_messages'
+  const client = getSupabaseClient();
+  if (client) {
+    try {
+      await client.from('contact_messages').insert({
+        id: newMessage.id,
+        full_name: data.fullName,
+        email_or_phone: data.emailOrPhone,
+        subject: data.subject,
+        message: data.message,
+        created_at: newMessage.createdAt,
+        status: 'unread',
+      });
+    } catch (e) {
+      console.warn('Error saving message to Supabase DB:', e);
+    }
+  }
+
+  return {
+    success: true,
+    message: 'Thank you! Your message has been sent to Manas Traders team in Tikapur.',
+  };
+}
+
+/**
+ * Fetch Contact Messages for Admin Dashboard
+ */
+export async function fetchContactMessagesFromSupabase(): Promise<any[]> {
+  const savedStr = localStorage.getItem('manas_traders_contact_messages');
+  const localMsgs = savedStr ? JSON.parse(savedStr) : [];
+
+  const client = getSupabaseClient();
+  if (client) {
+    try {
+      const { data, error } = await client
+        .from('contact_messages')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        return data.map((item: any) => ({
+          id: item.id,
+          fullName: item.full_name || item.fullName,
+          emailOrPhone: item.email_or_phone || item.emailOrPhone,
+          subject: item.subject,
+          message: item.message,
+          createdAt: item.created_at || item.createdAt,
+          status: item.status || 'unread',
+        }));
+      }
+    } catch (e) {
+      console.warn('Error fetching contact messages from Supabase:', e);
+    }
+  }
+
+  return localMsgs;
 }
 
 

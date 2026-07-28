@@ -54,9 +54,17 @@ export const Footer: React.FC = () => {
 
           {/* Contact Details */}
           <div className="space-y-3 text-xs">
-            <h4 className="font-bold text-sm text-white uppercase tracking-wider text-amber-400">
-              {getTranslation(language, 'contactUs')}
-            </h4>
+            <div className="flex items-center justify-between">
+              <h4 className="font-bold text-sm text-white uppercase tracking-wider text-amber-400">
+                {getTranslation(language, 'contactUs')}
+              </h4>
+              <button
+                onClick={() => setActiveModal('contact')}
+                className="text-[11px] bg-emerald-800 hover:bg-emerald-700 text-emerald-100 font-bold px-2.5 py-1 rounded-lg border border-emerald-700 transition-all cursor-pointer"
+              >
+                Open Page
+              </button>
+            </div>
 
             <div className="space-y-2 text-emerald-200">
               <div className="flex items-start gap-2">
@@ -98,31 +106,52 @@ export const Footer: React.FC = () => {
 
           {/* Payment Badges */}
           <div className="space-y-3 text-xs">
-            <h4 className="font-bold text-sm text-white uppercase tracking-wider text-amber-400">
-              Payment Partners
-            </h4>
+            <div className="flex items-center justify-between">
+              <h4 className="font-bold text-sm text-white uppercase tracking-wider text-amber-400">
+                Payment Partners
+              </h4>
+              <button
+                onClick={() => setActiveModal('esewaQr')}
+                className="text-[10px] bg-emerald-800 hover:bg-emerald-700 text-emerald-200 font-bold px-2 py-0.5 rounded-lg border border-emerald-700 transition-all cursor-pointer flex items-center gap-1"
+              >
+                <QrCode className="w-3 h-3 text-amber-400" />
+                <span>View QR</span>
+              </button>
+            </div>
 
             <p className="text-emerald-200 text-xs">
-              Instant mobile payment & cash on delivery accepted across Tikapur.
+              Instant mobile payment & cash on delivery accepted across Tikapur. Click eSewa or Khalti to view QR code.
             </p>
 
             <div className="grid grid-cols-2 gap-2 pt-1">
-              <div className="bg-emerald-900/80 border border-emerald-800 p-2 rounded-xl flex items-center gap-2">
-                <span className="w-6 h-6 rounded bg-emerald-600 font-black text-white text-[10px] flex items-center justify-center">e</span>
-                <span className="text-[11px] font-bold text-white">eSewa Wallet</span>
-              </div>
+              <button
+                onClick={() => setActiveModal('esewaQr')}
+                className="bg-emerald-900/80 hover:bg-emerald-800/90 border border-emerald-800 hover:border-emerald-600 p-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer text-left active:scale-95 group"
+                title="Click to view eSewa QR Code"
+              >
+                <span className="w-6 h-6 rounded bg-emerald-600 font-black text-white text-[10px] flex items-center justify-center shrink-0">e</span>
+                <span className="text-[11px] font-bold text-white group-hover:text-emerald-300">eSewa Wallet</span>
+              </button>
 
-              <div className="bg-purple-950/80 border border-purple-800 p-2 rounded-xl flex items-center gap-2">
-                <span className="w-6 h-6 rounded bg-purple-700 font-black text-white text-[10px] flex items-center justify-center">K</span>
-                <span className="text-[11px] font-bold text-white">Khalti Pay</span>
-              </div>
+              <button
+                onClick={() => setActiveModal('khaltiQr')}
+                className="bg-purple-950/80 hover:bg-purple-900/90 border border-purple-800 hover:border-purple-600 p-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer text-left active:scale-95 group"
+                title="Click to view Khalti Pay QR Code"
+              >
+                <span className="w-6 h-6 rounded bg-purple-700 font-black text-white text-[10px] flex items-center justify-center shrink-0">K</span>
+                <span className="text-[11px] font-bold text-white group-hover:text-purple-300">Khalti Pay</span>
+              </button>
 
-              <div className="bg-red-950/80 border border-red-800 p-2 rounded-xl flex items-center gap-2">
+              <div
+                className="bg-red-950/80 border border-red-800/80 p-2 rounded-xl flex items-center gap-2 text-left select-none opacity-90"
+              >
                 <QrCode className="w-4 h-4 text-red-400 shrink-0" />
-                <span className="text-[11px] font-bold text-white">Fonepay QR</span>
+                <span className="text-[11px] font-bold text-white">Fonepay Direct</span>
               </div>
 
-              <div className="bg-amber-950/80 border border-amber-800 p-2 rounded-xl flex items-center gap-2">
+              <div
+                className="bg-amber-950/80 border border-amber-800/80 p-2 rounded-xl flex items-center gap-2 text-left select-none opacity-90"
+              >
                 <span className="text-sm">💵</span>
                 <span className="text-[11px] font-bold text-white">Cash (COD)</span>
               </div>
