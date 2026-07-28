@@ -5,17 +5,11 @@ import { nepalDistricts } from '../data/products';
 import {
   ShoppingBag,
   Heart,
-  Globe,
   MapPin,
-  Database,
   Search,
-  SlidersHorizontal,
   ShieldCheck,
-  PackageCheck,
   User,
   X,
-  Sun,
-  Moon,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -25,9 +19,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
   const {
     language,
-    setLanguage,
-    theme,
-    toggleTheme,
     selectedDistrict,
     setSelectedDistrict,
     searchQuery,
@@ -35,12 +26,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
     cart,
     wishlist,
     setActiveModal,
-    isSupabaseConnected,
     user,
-    orders,
   } = useApp();
-
-  const [isSearchOpenMobile, setIsSearchOpenMobile] = useState(false);
 
   const cartTotalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -110,28 +97,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
               </select>
             </div>
 
-            {/* Language Switcher */}
-            <button
-              onClick={() => setLanguage(language === 'en' ? 'ne' : 'en')}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-emerald-400 dark:hover:border-emerald-500 bg-gray-50 dark:bg-gray-800 hover:bg-white dark:hover:bg-gray-700 text-xs font-semibold text-gray-800 dark:text-gray-200 transition-all"
-              title="Switch Language / भाषा फेर्नुहोस्"
-            >
-              <Globe className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>{language === 'en' ? 'नेपाली' : 'English'}</span>
-            </button>
 
-            {/* Dark / Light Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="flex items-center gap-1.5 p-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-gray-700 text-gray-700 dark:text-amber-400 transition-all cursor-pointer"
-              title={theme === 'dark' ? getTranslation(language, 'lightMode') : getTranslation(language, 'darkMode')}
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400 fill-amber-400/20" />
-              ) : (
-                <Moon className="w-4 h-4 text-gray-700" />
-              )}
-            </button>
 
             {/* User Account / Auth Modal Trigger */}
             <button
