@@ -34,15 +34,6 @@ export const AuthModal: React.FC = () => {
     isSupabaseConnected,
   } = useAuth();
 
-  const isOpen = activeModal === 'auth';
-
-  // If user is already logged in, render CustomerDashboardModal!
-  if (user && isOpen) {
-    return <CustomerDashboardModal />;
-  }
-
-  if (!isOpen) return null;
-
   // Active Tab
   const [activeTab, setActiveTab] = useState<AuthTab>('login');
 
@@ -60,6 +51,15 @@ export const AuthModal: React.FC = () => {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [needsEmailVerification, setNeedsEmailVerification] = useState(false);
   const [isResending, setIsResending] = useState(false);
+
+  const isOpen = activeModal === 'auth';
+
+  // If user is already logged in, render CustomerDashboardModal!
+  if (user && isOpen) {
+    return <CustomerDashboardModal />;
+  }
+
+  if (!isOpen) return null;
 
   const resetForm = () => {
     setErrorMsg(null);
@@ -224,14 +224,14 @@ export const AuthModal: React.FC = () => {
               Sign In
             </button>
             <button
-              onClick={() => switchTab('register')}
+              onClick={() => setActiveModal('registerPage')}
               className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer ${
                 activeTab === 'register'
                   ? 'bg-emerald-700 text-white shadow-xs'
                   : 'hover:text-white'
               }`}
             >
-              Register
+              📍 Smart Register
             </button>
           </div>
         </div>
@@ -353,35 +353,27 @@ export const AuthModal: React.FC = () => {
                   </>
                 )}
               </button>
-
-              {/* Demo Auto-fill Helper */}
-              <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 text-center">
-                <span className="text-xs font-medium text-gray-400 block mb-2">
-                  ⚡ Quick Demo Login Presets
-                </span>
-                <div className="flex items-center justify-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleQuickDemoFill('customer')}
-                    className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/40 text-xs font-bold text-gray-700 dark:text-gray-300 rounded-lg transition-colors cursor-pointer"
-                  >
-                    Auto Customer
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleQuickDemoFill('admin')}
-                    className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-amber-50 dark:hover:bg-amber-900/40 text-xs font-bold text-gray-700 dark:text-gray-300 rounded-lg transition-colors cursor-pointer"
-                  >
-                    Auto Admin
-                  </button>
-                </div>
-              </div>
             </form>
           )}
 
           {/* TAB 2: REGISTER FORM */}
           {activeTab === 'register' && (
-            <form onSubmit={handleRegister} className="space-y-3">
+            <div className="space-y-4">
+              <div className="p-3 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-500/30 rounded-2xl flex items-center justify-between gap-2">
+                <div className="text-xs text-emerald-900 dark:text-emerald-200">
+                  <span className="font-bold block">📍 Want Smart GPS Address Auto-Fill?</span>
+                  <span className="text-[11px] opacity-90">Auto-detect Province, District, Municipality & interactive Leaflet map pin.</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveModal('registerPage')}
+                  className="px-3 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition-transform active:scale-95 shrink-0 cursor-pointer"
+                >
+                  Open Smart Page →
+                </button>
+              </div>
+
+              <form onSubmit={handleRegister} className="space-y-3">
               <div>
                 <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
                   Full Name <span className="text-red-500">*</span>
@@ -498,6 +490,7 @@ export const AuthModal: React.FC = () => {
                 )}
               </button>
             </form>
+          </div>
           )}
 
           {/* TAB 3: FORGOT PASSWORD */}

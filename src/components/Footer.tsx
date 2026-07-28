@@ -14,10 +14,11 @@ import {
   CreditCard,
   QrCode,
   DollarSign,
+  Landmark,
 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const { language, setActiveModal } = useApp();
+  const { language, setActiveModal, addToast } = useApp();
 
   return (
     <footer className="bg-emerald-950 text-white pt-12 pb-8 border-t border-emerald-900 mt-16">
@@ -102,6 +103,14 @@ export const Footer: React.FC = () => {
             <p className="text-emerald-200 leading-relaxed">
               {getTranslation(language, 'deliveryArea')}
             </p>
+
+            <button
+              onClick={() => setActiveModal('orderTracking')}
+              className="mt-2 w-full py-2 px-3 bg-teal-800/80 hover:bg-teal-700 text-white font-extrabold text-xs rounded-xl border border-teal-600 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+            >
+              <Truck className="w-4 h-4 text-teal-300" />
+              <span>{language === 'ne' ? 'अर्डर ट्र्याकिङ हेर्नुहोस्' : 'Track Order Status'}</span>
+            </button>
           </div>
 
           {/* Payment Badges */}
@@ -142,12 +151,17 @@ export const Footer: React.FC = () => {
                 <span className="text-[11px] font-bold text-white group-hover:text-purple-300">Khalti Pay</span>
               </button>
 
-              <div
-                className="bg-red-950/80 border border-red-800/80 p-2 rounded-xl flex items-center gap-2 text-left select-none opacity-90"
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText('22025240200255');
+                  addToast('Bank Account Copied', 'Nepal SBI Bank Ltd.: 22025240200255 (Manas Traders Pvt. Ltd.)', 'info');
+                }}
+                className="bg-blue-950/80 hover:bg-blue-900/90 border border-blue-800 hover:border-blue-600 p-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer text-left active:scale-95 group"
+                title="Click to copy Nepal SBI Bank Account number"
               >
-                <QrCode className="w-4 h-4 text-red-400 shrink-0" />
-                <span className="text-[11px] font-bold text-white">Fonepay Direct</span>
-              </div>
+                <Landmark className="w-4 h-4 text-blue-400 shrink-0" />
+                <span className="text-[11px] font-bold text-white group-hover:text-blue-300">Bank Account</span>
+              </button>
 
               <div
                 className="bg-amber-950/80 border border-amber-800/80 p-2 rounded-xl flex items-center gap-2 text-left select-none opacity-90"

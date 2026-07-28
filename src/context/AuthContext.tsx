@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserProfile, SavedAddress } from '../types';
 import {
   signUpWithSupabase,
+  registerCustomerAccountWithLocation,
   signInWithSupabase,
   signOutWithSupabase,
   resetPasswordWithSupabase,
@@ -29,6 +30,28 @@ interface AuthContextType {
     district?: string,
     address?: string
   ) => Promise<{ userProfile: UserProfile | null; error: string | null; needsEmailVerification: boolean }>;
+  registerWithLocationDetails: (data: {
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    phone: string;
+    email?: string;
+    password?: string;
+    province: string;
+    district: string;
+    municipality: string;
+    wardNumber: string;
+    areaLocality: string;
+    street: string;
+    postalCode: string;
+    fullDeliveryAddress: string;
+    latitude?: number;
+    longitude?: number;
+    gpsAccuracy?: number;
+    registrationDate: string;
+    preferredLanguage: string;
+    themePreference: string;
+  }) => Promise<{ userProfile: UserProfile | null; error: string | null; needsEmailVerification: boolean }>;
   logout: () => Promise<void>;
   forgotPassword: (email: string) => Promise<{ success: boolean; error: string | null }>;
   changePassword: (newPassword: string) => Promise<{ success: boolean; error: string | null }>;
@@ -197,6 +220,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return result;
   };
 
+  // Register with full location & GPS metadata
+  const registerWithLocationDetails = async (data: {
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    phone: string;
+    email?: string;
+    password?: string;
+    province: string;
+    district: string;
+    municipality: string;
+    wardNumber: string;
+    areaLocality: string;
+    street: string;
+    postalCode: string;
+    fullDeliveryAddress: string;
+    latitude?: number;
+    longitude?: number;
+    gpsAccuracy?: number;
+    registrationDate: string;
+    preferredLanguage: string;
+    themePreference: string;
+  }) => {
+    const result = await registerCustomerAccountWithLocation(data);
+    if (result.userProfile) {
+      setUser(result.userProfile);
+      localStorage.setItem('manas_traders_user', JSON.stringify(result.userProfile));
+      if (result.userProfile.savedAddresses && result.userProfile.savedAddresses.length > 0) {
+        setSavedAddresses(result.userProfile.savedAddresses);
+      }
+    }
+    return result;
+  };
+
   // Logout
   const logout = async () => {
     await signOutWithSupabase();
@@ -307,6 +364,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isSupabaseConnected: !!getSupabaseClient(),
         login,
         register,
+        registerWithLocationDetails,
         logout,
         forgotPassword,
         changePassword,

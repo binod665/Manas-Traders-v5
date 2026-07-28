@@ -1612,8 +1612,8 @@ export const AdminModal: React.FC = () => {
                     <div className="space-y-2">
                       <span className="font-bold text-gray-800 block">Store Info</span>
                       <p className="text-gray-600">Store Name: Manas Traders Pvt. Ltd.</p>
-                      <p className="text-gray-600">Location: Kalanki, Kathmandu, Nepal</p>
-                      <p className="text-gray-600">Support Contact: +977 9801234567</p>
+                      <p className="text-gray-600">Location: Tikapur-1, Kailali, Nepal</p>
+                      <p className="text-gray-600">Support Contact: +977 9848500665</p>
                     </div>
                   </div>
                 </div>

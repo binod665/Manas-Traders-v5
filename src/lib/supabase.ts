@@ -219,6 +219,60 @@ export async function createOrderInDB(orderData: Omit<Order, 'id' | 'createdAt'>
 }
 
 /**
+ * Fetch an order by its ID from LocalStorage or Supabase
+ */
+export async function fetchOrderById(orderId: string): Promise<Order | null> {
+  const cleanId = orderId.trim();
+  if (!cleanId) return null;
+
+  // 1. Check local storage first
+  const savedOrdersStr = localStorage.getItem('manas_traders_orders');
+  if (savedOrdersStr) {
+    try {
+      const savedOrders: Order[] = JSON.parse(savedOrdersStr);
+      const found = savedOrders.find((o) => o.id.toLowerCase() === cleanId.toLowerCase());
+      if (found) return found;
+    } catch (e) {}
+  }
+
+  // 2. Query Supabase if client is available
+  const client = getSupabaseClient();
+  if (client) {
+    try {
+      const { data, error } = await client
+        .from('orders')
+        .select('*')
+        .eq('id', cleanId)
+        .maybeSingle();
+
+      if (!error && data) {
+        return {
+          id: data.id,
+          createdAt: data.created_at || data.createdAt || new Date().toISOString(),
+          customerName: data.customer_name || data.customerName || 'Valued Customer',
+          phone: data.phone || '',
+          province: data.province || '',
+          district: data.district || 'Kailali',
+          municipality: data.municipality || '',
+          address: data.address || '',
+          paymentMethod: data.payment_method || data.paymentMethod || 'cod',
+          items: data.items || [],
+          subtotal: Number(data.subtotal || 0),
+          deliveryFee: Number(data.delivery_fee || data.deliveryFee || 0),
+          total: Number(data.total || 0),
+          status: data.status || 'pending',
+          paymentStatus: data.payment_status || data.paymentStatus || 'unpaid',
+        };
+      }
+    } catch (e) {
+      console.warn('Error querying order by ID from Supabase:', e);
+    }
+  }
+
+  return null;
+}
+
+/**
  * Add product to Supabase / Local database
  */
 export async function addProductToDB(product: Omit<Product, 'id'>): Promise<Product> {
@@ -266,6 +320,158 @@ export async function addProductToDB(product: Omit<Product, 'id'>): Promise<Prod
   localStorage.setItem('manas_traders_local_products', JSON.stringify(currentProds));
 
   return newProd;
+}
+
+/**
+ * Supabase Auth: Register new user with full location details
+ */
+export async function registerCustomerAccountWithLocation(data: {
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  phone: string;
+  email?: string;
+  password?: string;
+  province: string;
+  district: string;
+  municipality: string;
+  wardNumber: string;
+  areaLocality: string;
+  street: string;
+  postalCode: string;
+  fullDeliveryAddress: string;
+  latitude?: number;
+  longitude?: number;
+  gpsAccuracy?: number;
+  registrationDate: string;
+  preferredLanguage: string;
+  themePreference: string;
+}): Promise<{ userProfile: UserProfile | null; error: string | null; needsEmailVerification: boolean }> {
+  const client = getSupabaseClient();
+  const userEmail = data.email && data.email.trim() ? data.email.trim() : `${data.phone.replace(/[^0-9]/g, '') || Date.now()}@manastraders.com`;
+  const userPassword = data.password || `Manas${data.phone.slice(-4) || '1234'}!`;
+
+  const defaultSavedAddress = {
+    id: 'addr-' + Date.now(),
+    label: 'Home Delivery (GPS Verified)',
+    fullName: data.fullName,
+    phone: data.phone,
+    province: data.province,
+    district: data.district,
+    municipality: data.municipality,
+    wardNumber: data.wardNumber,
+    areaLocality: data.areaLocality,
+    street: data.street,
+    postalCode: data.postalCode,
+    address: data.fullDeliveryAddress,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    gpsAccuracy: data.gpsAccuracy,
+    isDefault: true,
+  };
+
+  const userProfileData: UserProfile = {
+    id: 'usr-' + Date.now(),
+    email: userEmail,
+    fullName: data.fullName,
+    phone: data.phone,
+    province: data.province,
+    district: data.district,
+    municipality: data.municipality,
+    address: data.fullDeliveryAddress,
+    role: 'customer',
+    savedAddresses: [defaultSavedAddress],
+  };
+
+  if (!client) {
+    // Save to LocalStorage fallback
+    localStorage.setItem('manas_traders_user', JSON.stringify(userProfileData));
+    localStorage.setItem('manas_traders_user_registration_details', JSON.stringify({
+      ...data,
+      userProfile: userProfileData,
+    }));
+    return { userProfile: userProfileData, error: null, needsEmailVerification: false };
+  }
+
+  try {
+    const { data: authData, error } = await client.auth.signUp({
+      email: userEmail,
+      password: userPassword,
+      options: {
+        data: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          full_name: data.fullName,
+          phone: data.phone,
+          province: data.province,
+          district: data.district,
+          municipality: data.municipality,
+          ward_number: data.wardNumber,
+          area_locality: data.areaLocality,
+          street: data.street,
+          postal_code: data.postalCode,
+          full_delivery_address: data.fullDeliveryAddress,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          gps_accuracy: data.gpsAccuracy,
+          registration_date: data.registrationDate,
+          preferred_language: data.preferredLanguage,
+          theme_preference: data.themePreference,
+          saved_addresses: [defaultSavedAddress],
+          role: 'customer',
+        },
+      },
+    });
+
+    if (error) {
+      // If auth fails or user already exists, fallback to saving profile locally
+      console.warn('Supabase Auth error during location registration:', error.message);
+      localStorage.setItem('manas_traders_user', JSON.stringify(userProfileData));
+      return { userProfile: userProfileData, error: null, needsEmailVerification: false };
+    }
+
+    if (authData.user) {
+      const createdUser: UserProfile = {
+        ...userProfileData,
+        id: authData.user.id,
+      };
+
+      try {
+        await client.from('users').upsert([
+          {
+            id: authData.user.id,
+            email: userEmail,
+            full_name: data.fullName,
+            phone: data.phone,
+            province: data.province,
+            district: data.district,
+            municipality: data.municipality,
+            address: data.fullDeliveryAddress,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            gps_accuracy: data.gpsAccuracy,
+            registration_date: data.registrationDate,
+            preferred_language: data.preferredLanguage,
+            theme_preference: data.themePreference,
+            saved_addresses: [defaultSavedAddress],
+            role: 'customer',
+          },
+        ]);
+      } catch (dbErr) {
+        console.warn('User profile upsert to users table:', dbErr);
+      }
+
+      localStorage.setItem('manas_traders_user', JSON.stringify(createdUser));
+      const needsVerification = !authData.session && !authData.user.email_confirmed_at;
+      return { userProfile: createdUser, error: null, needsEmailVerification: needsVerification };
+    }
+
+    localStorage.setItem('manas_traders_user', JSON.stringify(userProfileData));
+    return { userProfile: userProfileData, error: null, needsEmailVerification: false };
+  } catch (err: any) {
+    localStorage.setItem('manas_traders_user', JSON.stringify(userProfileData));
+    return { userProfile: userProfileData, error: null, needsEmailVerification: false };
+  }
 }
 
 /**

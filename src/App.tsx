@@ -16,9 +16,11 @@ import { SupabaseConfigModal } from './components/SupabaseConfigModal';
 import { GitHubPagesGuideModal } from './components/GitHubPagesGuideModal';
 import { AdminModal } from './components/AdminModal';
 import { AuthModal } from './components/AuthModal';
+import { RegisterPage } from './components/RegisterPage';
 import { ContactModal } from './components/ContactModal';
 import { EsewaQrModal } from './components/EsewaQrModal';
 import { KhaltiQrModal } from './components/KhaltiQrModal';
+import { OrderTrackingModal } from './components/OrderTrackingModal';
 import { ToastContainer } from './components/ToastContainer';
 import { Footer } from './components/Footer';
 import { getTranslation } from './translations';
@@ -32,6 +34,8 @@ function StoreMain() {
     categories,
     selectedCategory,
     setSelectedCategory,
+    activeModal,
+    setActiveModal,
   } = useApp();
 
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -131,9 +135,26 @@ function StoreMain() {
       <GitHubPagesGuideModal />
       <AdminModal />
       <AuthModal />
+      {activeModal === 'registerPage' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-3 sm:p-6 overflow-y-auto">
+          <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white dark:bg-gray-950 rounded-3xl shadow-2xl p-2 sm:p-4">
+            <button
+              onClick={() => setActiveModal(null)}
+              className="absolute right-4 top-4 z-50 p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-extrabold transition-colors cursor-pointer"
+            >
+              ✕
+            </button>
+            <RegisterPage
+              onSuccess={() => setActiveModal(null)}
+              onSwitchToLogin={() => setActiveModal('auth')}
+            />
+          </div>
+        </div>
+      )}
       <ContactModal />
       <EsewaQrModal />
       <KhaltiQrModal />
+      <OrderTrackingModal />
       <ToastContainer />
     </div>
   );

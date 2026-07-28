@@ -390,7 +390,7 @@ export const CheckoutModal: React.FC = () => {
                     required
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    placeholder="e.g. Kalanki Ward #14, Near Bhatbhateni Supermarket"
+                    placeholder="e.g. Tikapur-1, Kailali, Near Bus Park"
                     className="w-full px-3 py-2 text-xs font-medium bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
                   />
                 </div>
@@ -508,80 +508,54 @@ export const CheckoutModal: React.FC = () => {
               )}
 
               {paymentMethod === 'esewa' && (
-                <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 rounded-2xl flex items-center gap-4">
+                <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 rounded-2xl flex items-center justify-between gap-4">
+                  <div className="text-xs space-y-1">
+                    <span className="font-extrabold text-emerald-950 dark:text-emerald-200 block">
+                      Pay via eSewa App
+                    </span>
+                    <p className="text-emerald-800 dark:text-emerald-300 text-[11px]">
+                      Merchant Name: <strong className="font-bold">MANAS TRADERS</strong>
+                    </p>
+                    <p className="text-emerald-800 dark:text-emerald-300 text-[11px]">
+                      eSewa ID / Mobile: <strong className="font-mono font-bold text-emerald-700 dark:text-emerald-400">9848500665</strong>
+                    </p>
+                    <p className="text-emerald-800 dark:text-emerald-300 text-[11px]">
+                      Total Payable: <strong className="font-extrabold text-emerald-900 dark:text-emerald-100">Rs. {total.toLocaleString('ne-NP')}</strong>
+                    </p>
+                  </div>
                   <button
                     type="button"
                     onClick={() => setActiveModal('esewaQr')}
-                    className="w-24 h-28 bg-white p-1 rounded-xl border border-emerald-300 dark:border-emerald-700 shrink-0 flex items-center justify-center hover:scale-105 transition-transform cursor-pointer shadow-xs group overflow-hidden"
-                    title="Click to expand eSewa QR Code"
+                    className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer shrink-0"
                   >
-                    <img
-                      src="/esewa_qr.jpg"
-                      alt="Manas Traders eSewa QR"
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-contain rounded-lg select-none"
-                    />
+                    View eSewa Info
                   </button>
-                  <div className="text-xs space-y-1">
-                    <span className="font-extrabold text-emerald-950 dark:text-emerald-200 block">
-                      Scan to Pay via eSewa App
-                    </span>
-                    <p className="text-emerald-800 dark:text-emerald-300 text-[11px]">
-                      Merchant: <strong className="font-bold">MANAS TRADERS</strong>
-                    </p>
-                    <p className="text-emerald-800 dark:text-emerald-300 text-[11px]">
-                      eSewa Number: <strong className="font-mono font-bold">9848500665</strong>
-                    </p>
-                    <p className="text-emerald-800 dark:text-emerald-300 text-[11px]">
-                      Amount: <strong className="font-extrabold text-emerald-900 dark:text-emerald-100">Rs. {total.toLocaleString('ne-NP')}</strong>
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => setActiveModal('esewaQr')}
-                      className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-900 cursor-pointer pt-0.5 block"
-                    >
-                      Click to view full-screen eSewa QR
-                    </button>
-                  </div>
                 </div>
               )}
 
               {paymentMethod === 'khalti' && (
-                <div className="p-3.5 bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 rounded-2xl flex items-center gap-4">
+                <div className="p-3.5 bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 rounded-2xl flex items-center justify-between gap-4">
+                  <div className="text-xs space-y-1">
+                    <span className="font-extrabold text-purple-950 dark:text-purple-200 block">
+                      Pay via Khalti App
+                    </span>
+                    <p className="text-purple-800 dark:text-purple-300 text-[11px]">
+                      Merchant Name: <strong className="font-bold">Manas Traders</strong>
+                    </p>
+                    <p className="text-purple-800 dark:text-purple-300 text-[11px]">
+                      Khalti ID / Mobile: <strong className="font-mono font-bold text-purple-700 dark:text-purple-400">9848500665</strong>
+                    </p>
+                    <p className="text-purple-800 dark:text-purple-300 text-[11px]">
+                      Total Payable: <strong className="font-extrabold text-purple-900 dark:text-purple-100">Rs. {total.toLocaleString('ne-NP')}</strong>
+                    </p>
+                  </div>
                   <button
                     type="button"
                     onClick={() => setActiveModal('khaltiQr')}
-                    className="w-24 h-28 bg-white p-1 rounded-xl border border-purple-300 dark:border-purple-700 shrink-0 flex items-center justify-center hover:scale-105 transition-transform cursor-pointer shadow-xs group overflow-hidden"
-                    title="Click to expand Khalti QR Code"
+                    className="px-3.5 py-2 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer shrink-0"
                   >
-                    <img
-                      src="/khalti_qr.jpg"
-                      alt="Manas Traders Khalti QR"
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-contain rounded-lg select-none"
-                    />
+                    View Khalti Info
                   </button>
-                  <div className="text-xs space-y-1">
-                    <span className="font-extrabold text-purple-950 dark:text-purple-200 block">
-                      Scan to Pay via Khalti App
-                    </span>
-                    <p className="text-purple-800 dark:text-purple-300 text-[11px]">
-                      Merchant: <strong className="font-bold">Manas Traders</strong>
-                    </p>
-                    <p className="text-purple-800 dark:text-purple-300 text-[11px]">
-                      Khalti Number: <strong className="font-mono font-bold">9848500665</strong>
-                    </p>
-                    <p className="text-purple-800 dark:text-purple-300 text-[11px]">
-                      Amount: <strong className="font-extrabold text-purple-900 dark:text-purple-100">Rs. {total.toLocaleString('ne-NP')}</strong>
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => setActiveModal('khaltiQr')}
-                      className="text-[10px] font-bold text-purple-700 dark:text-purple-400 underline hover:text-purple-900 cursor-pointer pt-0.5 block"
-                    >
-                      Click to view full-screen Khalti QR
-                    </button>
-                  </div>
                 </div>
               )}
 
@@ -593,14 +567,14 @@ export const CheckoutModal: React.FC = () => {
                       <span>Manas Traders Bank Account Details</span>
                     </span>
                     <span className="text-[10px] font-extrabold text-blue-800 bg-blue-100 px-2 py-0.5 rounded-md">
-                      NABIL BANK
+                      NEPAL SBI BANK
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 text-[11px]">
                     <div>
                       <span className="text-blue-600 block">Bank Name:</span>
-                      <span className="font-bold text-blue-900">Nabil Bank Limited</span>
+                      <span className="font-bold text-blue-900">Nepal SBI Bank Ltd.</span>
                     </div>
                     <div>
                       <span className="text-blue-600 block">Account Name:</span>
@@ -608,11 +582,11 @@ export const CheckoutModal: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-blue-600 block">Account Number:</span>
-                      <span className="font-mono font-bold text-blue-900">01201017500123</span>
+                      <span className="font-mono font-bold text-blue-900">22025240200255</span>
                     </div>
                     <div>
                       <span className="text-blue-600 block">Branch:</span>
-                      <span className="font-bold text-blue-900">New Road, Kathmandu</span>
+                      <span className="font-bold text-blue-900">Tikapur, Kailali</span>
                     </div>
                   </div>
                 </div>

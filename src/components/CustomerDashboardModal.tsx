@@ -32,10 +32,13 @@ import {
   KeyRound,
   ExternalLink,
   Tag,
+  Truck,
 } from 'lucide-react';
 import { SavedAddress } from '../types';
+import { OrderTrackingView } from './OrderTrackingModal';
+import { OrderHistory } from './OrderHistory';
 
-type DashboardTab = 'profile' | 'orders' | 'wishlist' | 'addresses' | 'password' | 'avatar';
+type DashboardTab = 'profile' | 'orders' | 'tracking' | 'wishlist' | 'addresses' | 'password' | 'avatar';
 
 export const CustomerDashboardModal: React.FC = () => {
   const {
@@ -68,6 +71,7 @@ export const CustomerDashboardModal: React.FC = () => {
   const isOpen = activeModal === 'auth' && !!user;
 
   const [activeTab, setActiveTab] = useState<DashboardTab>('profile');
+  const [trackingOrderId, setTrackingOrderId] = useState<string>('');
 
   // Profile Form State
   const [fullName, setFullName] = useState(user?.fullName || '');
@@ -304,6 +308,21 @@ export const CustomerDashboardModal: React.FC = () => {
                 <span className="px-2 py-0.5 bg-emerald-900 text-emerald-300 rounded-full text-[10px] font-bold">
                   {orders.length}
                 </span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('tracking')}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === 'tracking'
+                    ? 'bg-emerald-800 text-white shadow-sm'
+                    : 'text-emerald-200/80 hover:bg-emerald-900 hover:text-white'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Truck className="w-4 h-4 text-emerald-400" />
+                  <span>{language === 'ne' ? 'अर्डर ट्र्याकिङ' : 'Track Order Status'}</span>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 opacity-60" />
               </button>
 
               <button
@@ -558,88 +577,41 @@ export const CustomerDashboardModal: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-extrabold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                     <ShoppingBag className="w-5 h-5 text-emerald-700 dark:text-emerald-400" />
-                    <span>My Grocery Orders History ({orders.length})</span>
+                    <span>{language === 'ne' ? 'मेरा किराना अर्डरहरू' : 'My Grocery Orders History'}</span>
                   </h3>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                    Track current deliveries and view past grocery purchases.
+                    {language === 'ne'
+                      ? 'तपाईंका पुराना अर्डरहरू र वर्तमान स्थिति ट्र्याक गर्नुहोस्।'
+                      : 'Track live status, search past purchases, or reorder organic groceries.'}
                   </p>
                 </div>
               </div>
 
-              {orders.length === 0 ? (
-                <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-100 dark:border-gray-700 text-center">
-                  <ShoppingBag className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-                  <h4 className="font-bold text-gray-800 dark:text-gray-200 text-sm">No Orders Yet</h4>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-sm mx-auto">
-                    You haven't placed any organic grocery orders yet. Start adding items from Mustang, Ilam, or Tikapur!
-                  </p>
-                  <button
-                    onClick={() => setActiveModal(null)}
-                    className="mt-4 px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
-                  >
-                    Explore Organic Products
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {orders.map((order) => (
-                    <div
-                      key={order.id}
-                      className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs space-y-3"
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 dark:border-gray-700 pb-3 text-xs">
-                        <div>
-                          <span className="font-extrabold text-emerald-800 dark:text-emerald-400 text-sm block">
-                            {order.id}
-                          </span>
-                          <span className="text-gray-400 text-[11px]">
-                            Placed on {new Date(order.createdAt).toLocaleDateString('ne-NP')} • {order.district}
-                          </span>
-                        </div>
+              <OrderHistory
+                onTrackOrder={(orderId) => {
+                  setTrackingOrderId(orderId);
+                  setActiveTab('tracking');
+                }}
+              />
+            </div>
+          )}
 
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                              order.status === 'delivered'
-                                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300'
-                                : order.status === 'cancelled'
-                                ? 'bg-red-100 text-red-800 dark:bg-red-900/60 dark:text-red-300'
-                                : 'bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300'
-                            }`}
-                          >
-                            {order.status.replace(/_/g, ' ')}
-                          </span>
+          {/* TAB: TRACK ORDER STATUS */}
+          {activeTab === 'tracking' && (
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-xl font-extrabold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                  <Truck className="w-5 h-5 text-emerald-700 dark:text-emerald-400" />
+                  <span>{language === 'ne' ? 'अर्डर डेलिभरी ट्र्याकिङ' : 'Live Order Delivery Tracker'}</span>
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  {language === 'ne'
+                    ? 'तपाईंको अर्डर आईडी राखेर सामानको स्थिति र डेलिभरी प्रगती हेर्नुहोस्।'
+                    : 'Enter an order ID or select a demo order to track real-time delivery status.'}
+                </p>
+              </div>
 
-                          <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-[10px] font-bold uppercase">
-                            {order.paymentMethod}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Items */}
-                      <div className="space-y-1.5">
-                        {order.items.map((item, idx) => (
-                          <div key={idx} className="flex items-center justify-between text-xs text-gray-700 dark:text-gray-300">
-                            <span>
-                              {language === 'ne' ? item.nameNe : item.nameEn} ({item.unit}) × {item.quantity}
-                            </span>
-                            <span className="font-semibold text-gray-900 dark:text-gray-100">
-                              Rs. {(item.price * item.quantity).toLocaleString()}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="border-t border-gray-100 dark:border-gray-700 pt-2.5 flex items-center justify-between text-xs font-bold text-gray-900 dark:text-gray-100">
-                        <span>Total Paid ({order.items.length} items)</span>
-                        <span className="text-emerald-800 dark:text-emerald-400 text-sm">
-                          Rs. {order.total.toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <OrderTrackingView embedded={true} initialOrderId={trackingOrderId} />
             </div>
           )}
 
